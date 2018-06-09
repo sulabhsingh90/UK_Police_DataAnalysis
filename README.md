@@ -52,8 +52,9 @@ val ukPoliceDF=spark.read.format("csv").option("header", "true").option("mode", 
 				.option("path", "/UKPolice_data/*")
 				.load()
 ```
-Avoid inferSchema in production enviorment as it takes time and you can eliminate other issues too. For e.g: Our Dataset have spaces in between column name that can cause issue during development.
-{: .alert .alert-warning}
+> Avoid inferSchema in production enviorment as it takes time and you can eliminate other issues too. For e.g: Our Dataset have spaces in between column name that can cause issue during development.
+
+
 
 [1]:https://data.police.uk/data/
 
