@@ -119,8 +119,7 @@ OUTPUT:
 * Find out percentage of cases where accused are not guilty in outcome
 
 ```scala
-val notGuilty=ukPoliceDF
-				.groupBy("crime type").agg(count("*").alias("total"),
+val notGuilty=ukPoliceDF.groupBy("crime type").agg(count("*").alias("total"),
 						sum(when(col("Last outcome category")==="Defendant found not guilty",lit(1)).otherwise(lit(0))
 								).alias("notguilty")).withColumn("notguiltypercent", bround(col("notguilty")/col("total")*lit(100),2)).orderBy(desc("notguilty"),desc("total"))
 
