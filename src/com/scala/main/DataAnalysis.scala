@@ -16,7 +16,7 @@ object DataAnalysis {
 		val spark=SparkSession.builder().appName("DataAnalysis").master("local[*]").getOrCreate()
 				val ukPoliceDF=spark.read.format("csv").option("header", "true").option("mode", "FAILFAST")
 				.option("inferSchema", "true")
-				.option("path", "E:/DevEnv/UKPolice_data/*")
+				.option("path", "/UKPolice_data/*")
 				.load()
 				
 				/*
