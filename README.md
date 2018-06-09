@@ -31,17 +31,17 @@ ___
 
 Extract downloaded folder at any handy location on your machine. I am assuming you already have a working SCALA Eclipse IDE, check out this example in your workspace.
 
-'''linux
+```linux
 	git clone https://github.com/sulabh92/UK_Police_DataAnalysis.git
-'''
+```
 
 Now you have a Scala project in your eclipse. Go to **_DataAnalysis.scala_**
 
 First we have to initiate our Spark Session
 
-'''scala
+```scala
 val spark=SparkSession.builder().appName("DataAnalysis").master("local[*]").getOrCreate()
-'''
+```
 
-[1]:(https://data.police.uk/data/) 
+[1]:https://data.police.uk/data/
 
