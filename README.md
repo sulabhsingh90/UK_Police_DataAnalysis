@@ -28,14 +28,11 @@ ___
 
 ## Structure of our CSV files
 
-
-
 Crime ID|Month|Reported by|Falls within|Longitude|Latitude|Location|LSOA code|LSOA name|Crime type|Last outcome category|Context
 ---|---|---|---|---|---|---|---|---|---|---|---
 5ead780133e271220de3fe6215a2ef5c0cdaf09459efd1d599a5390f3aeb5c6a|2018-03|Avon and Somerset Constabulary|Avon and Somerset Constabulary|-2.511571|51.414895|On or near Orchard Close|E01014399|Bath and North East Somerset 001A|Vehicle crime|Under investigation|
 5d20e6f6fb0befd7ed627abe332d3bc0dda5312249b42ccca71968a5440ba299|2018-03|Avon and Somerset Constabulary|Avon and Somerset Constabulary|-2.511571|51.414895|On or near Orchard Close|E01014399|Bath and North East Somerset 001A|Vehicle crime|Under investigation|
 45e332d048fe54325cb5e8601976b49dd3225fbcd0cda8fd7f507b7fdf307fec|2018-03|Avon and Somerset Constabulary|Avon and Somerset Constabulary|-2.511571|51.414895|On or near Orchard Close|E01014399|Bath and North East Somerset 001A|Violence and sexual offences|Under investigation|
-
 
 
 ## Let us define our problem statement for this example
