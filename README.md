@@ -53,8 +53,108 @@ val ukPoliceDF=spark.read.format("csv").option("header", "true").option("mode", 
 				.load()
 ```
 > Avoid inferSchema in production enviorment as it takes time and you can eliminate other issues too. For e.g: Our Dataset have spaces in between column name that can cause issue during development.
+> It is recommended to create manual schema on production enviorment.
+* List distinct Crime type from our Dataframe
 
+```scala
+ukPoliceDF.select("Last outcome category").distinct().collect().foreach(println)
+```
+ Hopefully, you will get in your console
+ ```
+ [Offender ordered to pay compensation]
+[Offender given suspended prison sentence]
+[Defendant sent to Crown Court]
+[Offender given penalty notice]
+[Suspect charged as part of another case]
+[null]
+[Local resolution]
+[Offender given a caution]
+[Offender given conditional discharge]
+[Investigation complete; no suspect identified]
+[Offender given absolute discharge]
+[Under investigation]
+[Awaiting court outcome]
+[Defendant found not guilty]
+[Offender sent to prison]
+[Further investigation is not in the public interest]
+[Action to be taken by another organisation]
+[Offender given community sentence]
+[Offender given a drugs possession warning]
+[Formal action is not in the public interest]
+[Offender fined]
+[Court case unable to proceed]
+[Offender otherwise dealt with]
+[Offender deprived of property]
+[Unable to prosecute suspect]
+ ```
+* Find out frequency of each crimes (Number of crimes committed)
 
+```scala
+val topCrime=ukPoliceDF.groupBy(col("crime type"))
+				.count().withColumnRenamed("count", "total")
+				.orderBy(desc("total"))
+
+				topCrime.collect().foreach(println)
+```
+> Have you noticed that we have mentioned Crime Type column with **col** in groupBy, but in **withColumnRenamed** method we are simply passing column name as string. This is because Spark will compile your expressions or functions or sql logics down to an underlying plan before actually executing , so every statement will run eactly the same beneath the skin.
+
+OUTPUT:
+```
+[Violence and sexual offences,283132]
+[Anti-social behaviour,235834]
+[Criminal damage and arson,96982]
+[Other theft,89430]
+[Vehicle crime,76677]
+[Public order,69989]
+[Burglary,68621]
+[Shoplifting,66085]
+[Drugs,23755]
+[Other crime,16914]
+[Theft from the person,16101]
+[Robbery,12966]
+[Bicycle theft,12235]
+[Possession of weapons,7680]
+```
+
+* Find out percentage of cases where accused are not guilty in outcome
+
+```scala
+val notGuilty=ukPoliceDF
+				.groupBy("crime type").agg(count("*").alias("total"),
+						sum(when(col("Last outcome category")==="Defendant found not guilty",lit(1)).otherwise(lit(0))
+								).alias("notguilty")).withColumn("notguiltypercent", bround(col("notguilty")/col("total")*lit(100),2)).orderBy(desc("notguilty"),desc("total"))
+
+				notGuilty.collect().foreach(println)
+```
+
+> We can use **agg** functions to do some complex aggregation on RelationalGroupedDataset. "Defendant found not guilty" is a value present in dataset, **lit()** function is used to define sparkType literals.
+>**asc,desc,count,expr,sum,when,col,lit,bround** are functions imported from **org.apache.spark.sql.functions**
+
+OUTPUT:
+
+```
+[Violence and sexual offences,283132,160,0.06]
+[Public order,69989,32,0.05]
+[Shoplifting,66085,21,0.03]
+[Criminal damage and arson,96982,17,0.02]
+[Burglary,68621,17,0.02]
+[Other crime,16914,16,0.09]
+[Possession of weapons,7680,9,0.12]
+[Drugs,23755,8,0.03]
+[Other theft,89430,5,0.01]
+[Vehicle crime,76677,5,0.01]
+[Robbery,12966,4,0.03]
+[Theft from the person,16101,3,0.02]
+[Anti-social behaviour,235834,0,0.0]
+[Bicycle theft,12235,0,0.0]
+```
+
+> ### Warning:
+> Collect is very expensive operation that can crash your driver program when dealing with large dataset. Its also not recommended as it will process data one by one basis instead of running in parllel
+
+---
+#### I will try to cover more Spark SQL/Dataframe functions in future commits. 
+> Happy Learning
 
 [1]:https://data.police.uk/data/
 
