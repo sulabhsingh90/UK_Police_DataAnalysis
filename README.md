@@ -42,6 +42,18 @@ First we have to initiate our Spark Session
 ```scala
 val spark=SparkSession.builder().appName("DataAnalysis").master("local[*]").getOrCreate()
 ```
+:+1: Our SparkSession is initated with **spark**.
+
+Now we will read our data with the help of dataframe reader.
+
+```scala
+val ukPoliceDF=spark.read.format("csv").option("header", "true").option("mode", "FAILFAST")
+				.option("inferSchema", "true")
+				.option("path", "/UKPolice_data/*")
+				.load()
+```
+Avoid inferSchema in production enviorment as it takes time and you can eliminate other issues too. For e.g: Our Dataset have spaces in between column name that can cause issue during development.
+{: .alert .alert-warning}
 
 [1]:https://data.police.uk/data/
 
